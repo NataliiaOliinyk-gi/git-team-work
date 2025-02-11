@@ -3,6 +3,7 @@
 # Запрос исходной и целевой директории у пользователя
 read -p "Введите путь к исходной директории: " sourse_dir
 read -p "Введите путь к целевой директории: " target_dir
+
 # Запрос расширения файлов, которые нужно скопировать
 read -p "введите расшырение файла: " file_extention
 
@@ -19,12 +20,10 @@ if [ ! -d $target_dir ]; then
 fi
 
 # Проверка, есть ли файлы с указанным расширением в исходной директории
-shopt -s nullglob
-files=("$source_dir"/*."$file_extention")
-
-if [ ${#files[@]} -eq 0 ]; then
-    echo "Ошибка: В исходной директории нет файлов с расширением '$file_extention'."
+if ! find "$source_dir" -type f -name "*.$file_extension" | grep -q .; then
+    echo "Файлов с расширением .$file_extension нет в исходной директории"
     exit 1
 fi
+
 # Копирование файлов с указанным расширением в целевую директорию
 cp "$source_dir"/*."$file_extension" "$target_dir"
